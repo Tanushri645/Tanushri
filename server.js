@@ -1,18 +1,34 @@
-const express= require("express");
-const app=express();
+const express = require("express");
+const mongoose = require("mongoose");
+const cors = require("cors");
 
-app.get("/",(req,res) =>{
+const app = express();
+const PORT = 5002;
+
+app.use(express.json());
+app.use(cors());
+
+mongoose
+.connect(
+  "mongodb+srv://tanushridascse:Tanu005@tanu005.0uclm.mongodb.net/?retryWrites=true&w=majority&appName=Tanu005" ,  
+   {}
+  )
+
+.then(()=>{
+    console.log("Connected to Database");
+});
+
+//routes
+const userRoute = require("./route/user.route");
+const todoRoute=require("./route/todo.route");
+app.use("/user", userRoute);
+app.use("/todo",todoRoute);
+
+app.get("/", (req, res) => {
     res.send("Hello World");
-});
-app.get("/date",(req,res) =>{
-    res.send(new Date().toString);
-});
-app.use((req,res) => {
-    res.status(404).send("page not found");
+    res.end();
 });
 
-
-const PORT =3000;
-server.listen(PORT,() => {
-    console.log(`server is running on port ${PORT}`);
+app.listen(PORT, () => {
+    console.log(`Server is running on port http://localhost:${PORT}`);
 });
